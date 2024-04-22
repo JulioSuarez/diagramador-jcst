@@ -45,17 +45,14 @@ function init() {
 
     // metodo que permite desactivar el boton de guardar cuando no hay cambios, y que no le de guardar varias veces
     miDiagrama.addDiagramListener("Modified", e => {
-        // console.warn('acabo de ejecutar el addDiagramListener()');
-        const button = document.getElementById("btnGuardar");
+        console.log('acabo de ejecutar el addDiagramListener()');
+        // const button = document.getElementById("btnGuardar");
         // // console.log(button);
-        if (button) button.disabled = !miDiagrama.isModified;
-        // const idx = document.title.indexOf("*");
-        //  console.log();
-        // if (miDiagrama.isModified) {
-        //   if (idx < 0) document.title += "*";
-        // } else {
-        //   if (idx >= 0) document.title = document.title.slice(0, idx);
-        // }
+        // if (button) button.disabled = !miDiagrama.isModified;
+
+        if (e.change === go.ChangedEvent.Property) {
+            console.log("La propiedad " + e.propertyName + " cambió.");
+        }
     });
 
 
@@ -72,16 +69,18 @@ function init() {
                 click: function (e, node) {
                     // Esta función se ejecutará cuando se haga clic en el nodo
                     console.log('le di click al titulo grupo: ', node.data.key);
-                    // console.warn(node.data);
-
-                    // Abre aquí el modal o realiza las acciones que necesites
-                    // console.warn(node.data,);
-                    // console.warn(e);
                     key_artefacto = node.data.key;
                     loc = node.data.loc;
                     // console.warn(  key_modal_controller);
                     abrir_modal_controller(key_artefacto, loc);
-                }
+                },
+                //suprimir
+                click: function (e, node) {
+                    // esta funcion se ejecuta cuando se hace clic en el nodo y suprimir o delete
+                    key_artefacto = node.data.key;
+
+
+                },
             },
             new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
             $GG(go.Panel, "Auto",
@@ -89,14 +88,6 @@ function init() {
                     name: "HEADER",
 
                 },
-                // $GG(go.Shape, "Circle",
-                //     {
-                //         fill: $GG(go.Brush, "Linear", { 0: "#bbdefb", 1: go.Brush.darkenBy("#bbdefb", 0.1) }),
-                //         stroke: null
-                //     }),
-                // $(go.Picture,
-                //     { maxSize: new go.Size(50, 50) },
-                //     new go.Binding("source", "img")),
                 $GG(go.Shape, "Rectangle",
                     {
                         fill: $GG(go.Brush, "Linear",
@@ -127,6 +118,10 @@ function init() {
                     fromLinkableDuplicates: true,
                     toLinkable: true,
                     toLinkableDuplicates: true,
+
+                    //enlace recursivo
+                    fromLinkableSelfNode: true,
+                    toLinkableSelfNode: true,
                     cursor: "pointer"
                 },
                 new go.Binding("height", "duration", computeLifelineHeight))
@@ -134,11 +129,12 @@ function init() {
 
     // define the Activity Node template
     miDiagrama.nodeTemplate =
-        $GG(go.Node,
+        $GG(go.Node, "Auto",
             {
                 locationSpot: go.Spot.Top, // determina el punto de referencia para la posición del nodo
                 locationObjectName: "SHAPE",
                 //limites de ubicaiones del nodo
+
                 minLocation: new go.Point(NaN, LinePrefix - ActivityStart),
                 maxLocation: new go.Point(NaN, 19999),
                 selectionObjectName: "SHAPE",
@@ -240,7 +236,15 @@ function computeActivityLocation(act) {
     const grouploc = go.Point.parse(groupdata.loc);
     return new go.Point(grouploc.x, convertTimeToY(act.start) - ActivityStart);
 }
-
+// calcular la siguiente localizacion segun el ultimo nodo
+function computeActivityLocation2(act) {
+    console.log('computeActivityLocation', act);
+    const groupdata = miDiagrama.model.findNodeDataForKey(act.group);
+    if (groupdata === null) return new go.Point();
+    // Obtener la ubicación del punto de inicio de la línea de vida
+    const grouploc = go.Point.parse(groupdata.loc);
+    return new go.Point(grouploc.x, convertTimeToY(act.start) - ActivityStart);
+}
 // Función para calcular la ubicación de una actividad cuando se revierte el proceso
 function backComputeActivityLocation(loc, act) {
     let data = {
@@ -487,13 +491,13 @@ class MessageDraggingTool extends go.DraggingTool {
     // Anula para permitir el arrastre cuando la selección incluye solo enlaces.
     mayMove() {
         // let movimiento = !this.diagram.isReadOnly && this.diagram.allowMove;
-        return  !this.diagram.isReadOnly && this.diagram.allowMove;
+        return !this.diagram.isReadOnly && this.diagram.allowMove;
     }
 
     // Anula para mover enlaces (asumidos como MessageLinks) actualizando su propiedad Link.data.time,
     // de modo que las rutas de los enlaces tengan la posición vertical correcta.
     moveParts(parts, offset, check) {
-        console.log('Julico parts: ', parts);
+        // console.log('MOVER NODO: ', parts);
         super.moveParts(parts, offset, check);
         const it = parts.iterator;
         while (it.next()) {
@@ -567,25 +571,16 @@ var datos = {
 bt_save_object.addEventListener('click', function () {
     console.warn('le di click en adicionar');
     let key = document.getElementById('key').value;
-    // let text = document.getElementById('text').value;
     console.log('key: ', key);
-    // console.log('text: ', text);
 
-    console.warn('localizacion1 ', loc);
-    if (loc != '0 0') {
-        console.warn('localizacion2 ', loc);
-        loc = parseInt(loc);
-        console.log('loc1: ', loc);
-        loc += 100;
-        loc = `${loc} 0`;
-        console.log('loc2: ', loc);
-    }
+    // Calcula la nueva ubicación de forma dinámica
+    let newLoc = calculateNewLocation();
 
     var newNodeData = {
         key: key,
         text: key,
         isGroup: true,
-        loc: loc,
+        loc: newLoc,
         duration: 9
     };
 
@@ -594,13 +589,36 @@ bt_save_object.addEventListener('click', function () {
     socket.emit('addArtefacto', newNodeData);
     guardarArtefacto(newNodeData);
     miDiagrama.select(miDiagrama.findNodeForKey(key));
-    if (loc == '0 0') {
-        loc = parseInt(loc);
-        loc += 150;
-        loc = `${loc} 0`;
-    }
+
+    // Actualiza la ubicación para el próximo nodo
+    updateLocation();
+
     document.getElementById('myModal').close();
 });
+
+// Función para calcular la nueva ubicación de forma dinámica
+function calculateNewLocation() {
+    let newLoc = '0 0';
+    if (loc !== '0 0') {
+        let locParts = loc.split(' ');
+        let x = parseInt(locParts[0]);
+        let y = parseInt(locParts[1]);
+        x += 100;
+        newLoc = `${x} ${y}`;
+    }
+    return newLoc;
+}
+
+// Función para actualizar la ubicación para el próximo nodo
+function updateLocation() {
+    if (loc === '0 0') {
+        loc = '150 0';
+    } else {
+        let locParts = loc.split(' ');
+        let x = parseInt(locParts[0]) + 150;
+        loc = `${x} ${locParts[1]}`;
+    }
+}
 
 function guardarArtefacto(newNodeData) {
     let token = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
@@ -641,10 +659,12 @@ function load() {
 let modal_controler = document.getElementById('modal_controler');
 const abrir_modal_controller = (key, loc) => {
     console.log('abrir_modal_controller');
-    console.log('la key es:', key);
+    // console.log('la key es:', key, 'la loc es:', loc);
     // let datosxd = datos;
     var ultimaKey = key;
     var ultimaLoc = loc;
+    console.log('ultimaLoc', ultimaLoc);
+    console.log('ultimaKey', ultimaKey);
 }
 
 // socket cliente escucha eventos
@@ -714,3 +734,10 @@ socket.on('addDurationCliente', function (gr, max) {
 //     // Luego, puedes forzar la actualización de la vista del diagrama para mostrar el nuevo nodo
 //     miDiagrama.requestUpdate(); // Refresca la vista del diagra
 // });
+miDiagrama.addModelChangedListener(e => {
+    // ignore unimportant Transaction events
+    console.log('OJOO', e.model);
+    if (!evt.isTransactionFinished) return;
+    var json = e.model.toIncrementalJson(e);
+    var data = e.model.toIncrementalData(e);
+});
