@@ -588,6 +588,6 @@ class DiagramadorController extends Controller
     }
 
     public function eliminarArtefacto(){
-        
+
     }
 }

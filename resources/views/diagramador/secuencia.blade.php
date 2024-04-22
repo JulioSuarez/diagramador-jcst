@@ -34,9 +34,9 @@
                             class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-center">Exportar
                             Case</button>
                     </form>
-                    {{-- <button id="bt_new_nodo" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Agregar Artefacto
-                    </button> --}}
+                    <button id="btn_guardar" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                        GUARDAR
+                    </button>
                 </div>
 
                 <div class="flex items-center text-gray-500 text-sm">
@@ -51,7 +51,7 @@
                         {{-- <span>{{ $i['invitado'] }}</span> --}}
                     @empty
                     @endforelse
-                    <p>Cantidad de usuarios conectados: <span id="userCount"></span></p>
+                    {{-- <p>Cantidad de usuarios conectados: <span id="userCount"></span></p> --}}
                 </div>
             </div>
 

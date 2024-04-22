@@ -24,7 +24,7 @@
         <div class="container mx-auto mt-8">
             <div class="w-full bg-white rounded-lg shadow-md p-4">
                 <div class="flex justify-between items-center">
-                    <h1 class="text-3xl font-semibold my-4">Mis Pizarras</h1>
+                    <h1 class="text-3xl font-semibold my-4">Mis Diagramas</h1>
                 </div>
                 <div class="text-right w-full">
                     <form action="{{ route('diagramador.store') }}" method="POST" class="mb-4">
@@ -32,58 +32,14 @@
                         <div class="flex justify-center mb-8">
                             <input type="text" name="titulo" placeholder="Ingrese un Titulo" required
                                 class="border border-gray-300 px-4 py-2 rounded-l-md w-64">
-                            <button class="bg-green-500 text-white px-4 py-2 rounded-r-md">Crear</button>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded-r-md">Crear</button>
                         </div>
                     </form>
                 </div>
 
-                {{-- <table class="min-w-full border border-collapse border-gray-300">
-                    <thead>
-                        <tr>
-                            <th class="border border-gray-300 px-4 py-2">ID</th>
-                            <th class="border border-gray-300 px-4 py-2">Título</th>
-                            <th class="border border-gray-300 px-4 py-2">Invitados</th>
-                            <th class="border border-gray-300 px-4 py-2">Autor</th>
-                            <th class="border border-gray-300 px-4 py-2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($arrayDiagramas as $diagrama)
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $diagrama['id_diagrama'] }}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $diagrama['titulo'] }}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    @foreach ($diagrama['invitados'] as $i)
-                                        <p>
-                                            {{ $i }}
-                                        </p>
-                                    @endforeach
-                                </td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">{{ $diagrama['autornombre'] }}</td>
-                                <td class="border border-gray-300 px-4 py-2 text-center">
-                                    <div class="flex items-center justify-center">
-                                        <a href="{{ route('diagramador.edit', $diagrama['id_diagrama']) }}"
-                                            class="text-blue-500 hover:text-blue-700 mr-2">Editar</a>
-                                        <a href="{{ route('invitar', $diagrama['id_diagrama']) }}"
-                                            class="text-black hover:text-blue-700 mr-2">Invitar</a>
-                                        <a href="{{ route('diagramador.show', $diagrama['id_diagrama']) }}"
-                                            class="text-green-500 hover:text-green-700 mr-2">Trabajar</a>
-                                        <form action="{{ route('diagramador.destroy', $diagrama['id_diagrama']) }}"
-                                            method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:text-red-700">Eliminar</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table> --}}
-
                 <div class="flex">
                     @foreach ($arrayDiagramas as $diagrama)
-                        <div class="max-w-md bg-white p-8 rounded-md shadow-md m-2">
+                        <div class="max-w-screen-md bg-purple-100 p-8 rounded-md shadow-md m-2">
                             <!-- Imagen -->
                             <img src="https://www.gliffy.com/sites/default/files/image/2020-07/image-blog-uml-2-5-diagram-types_0.jpg"
                                 alt="Imagen" class="w-full h-32 object-cover mb-4 rounded-md">
@@ -177,13 +133,11 @@
                             <div class="flex space-x-4">
                                 <a href="{{ route('diagramador.show', $diagrama['id']) }}"
                                     class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Trabajar</a>
-                                    <form action="{{ route('invitadoDelete') }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('POST')
-                                        <input type="text" name="id_diagrama" value="{{ $diagrama['id'] }}"
-                                            class="hidden">
-                                        <input type="text" name="id_invitado" value="{{ $email }}"
-                                            class="hidden">
+                                <form action="{{ route('invitadoDelete') }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('POST')
+                                    <input type="text" name="id_diagrama" value="{{ $diagrama['id'] }}" class="hidden">
+                                    <input type="text" name="id_invitado" value="{{ $email }}" class="hidden">
                                     <button type="submit"
                                         class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Abandonar</button>
                                 </form>
