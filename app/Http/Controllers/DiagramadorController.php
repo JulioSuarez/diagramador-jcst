@@ -474,7 +474,7 @@ class DiagramadorController extends Controller
 
         $headers = [
             'Content-type'        => 'text/html; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="pizarra-' . $fecha . '.xml"',
+            'Content-Disposition' => 'attachment; filename="Ivana-' . $fecha . '.xml"',
         ];
 
         return new Response($html, 200, $headers);
