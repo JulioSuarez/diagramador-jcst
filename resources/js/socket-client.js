@@ -3,8 +3,8 @@ import { io } from 'socket.io-client';
 
 // export const socket = io('http://172.31.21.125:3000', {
 // export const socket = io('http://127.0.0.1:3000', {
-export const socket = io('http://0.0.0.0:3000', {
-// export const socket = io('http://3.142.249.222:3000', {
+// export const socket = io('http://0.0.0.0:3000', {
+export const socket = io('http://3.142.249.222:3000', {
 // export const socket = io('http://juliosuarez.tech:3000', {
     transports: ['websocket'],
 });
