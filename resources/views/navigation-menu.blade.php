@@ -157,6 +157,9 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Home') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link href="{{ route('diagramador.index') }}" :active="request()->routeIs('diagramador.index')">
+                {{ __('Mis Diagramas') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
