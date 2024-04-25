@@ -168,9 +168,12 @@ class DiagramadorController extends Controller
     public function destroy(diagramador $diagramador)
     {
         // Eliminar el registro de diagramador y sus invitados
-        $eliminarInvitados = invitado::where('id_diagrama', $diagramador->id)->delete();
-        $diagramador->delete();
+        $eliminarInvitados = invitado::where('id_diagrama', '=', $diagramador->id)->delete();
+        $a = artefacto::where('id_diagrama', $diagramador->id )->delete();
+        $l = link::where('id_diagrama', $diagramador->id )->delete();
+        $g = grupo::where('id_diagrama', $diagramador->id )->delete();
         // Redirigir a la vista deseada después de la eliminación
+        $diagramador->delete();
         return redirect()->route('diagramador.index')->with('success', 'Diagrama eliminado correctamente');
     }
 

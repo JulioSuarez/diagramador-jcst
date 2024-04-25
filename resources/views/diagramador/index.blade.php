@@ -1,7 +1,12 @@
 @extends('layouts.app') <!-- Asegúrate de que estés utilizando la plantilla de Laravel que deseas -->
 
 @section('content')
-
+<style>
+    .color-ivana {
+    --tw-bg-opacity: 1;
+    background-color: #B78ABE
+}
+</style>
     @if (session('success'))
         <div class="animate-bounce fixed top-4 right-1/3 z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
             <div id="toast-default"
@@ -39,32 +44,78 @@
 
                 <div class="flex">
                     @foreach ($arrayDiagramas as $diagrama)
-                        <div class="max-w-screen-md bg-purple-100 p-8 rounded-md shadow-md m-2">
+                        <div class="max-w-screen-md w-96 bg-purple-100 p-8 rounded-md shadow-md m-2">
                             <!-- Imagen -->
-                            <img src="https://www.gliffy.com/sites/default/files/image/2020-07/image-blog-uml-2-5-diagram-types_0.jpg"
-                                alt="Imagen" class="w-full h-32 object-cover mb-4 rounded-md">
+                            <img src="https://corporate-assets.lucid.co/chart/ab2608a0-d145-4f8d-a33b-85a7ae1186be.png"
+                                alt="Imagen" class="w-full h-60 object-cover mb-4 rounded-md">
 
                             <!-- Título -->
-                            <h2 class="text-xl font-semibold mb-2">{{ $diagrama['titulo'] }}</h2>
+                            <h2 class="flex text-xl font-semibold mb-2">{{ $diagrama['titulo'] }} 
+                                <form action="{{ route('diagramador.destroy', $diagrama['id_diagrama']) }}" method="POST"
+                                class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                >
+                                <svg class="w-6 h-6 text-red-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                  </svg></button>
+                                </form>  
+                                </h2>
+                            
+                              
 
                             <!-- Autor -->
                             <p class="text-gray-600 mb-4">Autor: {{ $diagrama['autornombre'] }}</p>
 
                             <!-- Botones -->
-                            <div class="flex space-x-4">
-                                <a href="{{ route('diagramador.edit', $diagrama['id_diagrama']) }}"
+                            {{-- <div class="flex space-x-4">
+                                 <a href="{{ route('diagramador.edit', $diagrama['id_diagrama']) }}"
                                     class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Editar</a>
                                 <a href="{{ route('invitar', $diagrama['id_diagrama']) }}"
                                     class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Invitar</a>
                                 <a href="{{ route('diagramador.show', $diagrama['id_diagrama']) }}"
                                     class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Trabajar</a>
-                                <form action="{{ route('diagramador.destroy', $diagrama['id_diagrama']) }}" method="POST"
+                                
+                                    <form action="{{ route('diagramador.destroy', $diagrama['id_diagrama']) }}" method="POST"
                                     class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
                                         class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Eliminar</button>
-                                </form>
+                                </form>  --}}
+
+
+                                <div class="inline-flex rounded-md shadow-sm">
+                                    <a href="{{ route('diagramador.edit', $diagrama['id_diagrama']) }}" aria-current="page" 
+                                    class="px-4 py-2 text-sm font-medium text-white bg-rose-300 border border-gray-200 rounded-s-lg hover:bg-rose-400 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                      Editar
+                                    </a>
+                                    
+                                    <a href="{{ route('invitar', $diagrama['id_diagrama']) }}" 
+                                    class="px-4 py-2 text-sm font-medium text-white bg-purple-300 border-t border-b border-gray-200 hover:bg-purple-400 hover:text-white focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                      Invitar
+                                    </a>
+                                    
+                                    <a href="{{ route('diagramador.show', $diagrama['id_diagrama']) }}"
+                                     class="px-4 py-2 text-sm font-medium text-white color-ivana  border-t border-b border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-white focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                      Trabajar
+                                    </a>
+                                    
+                                    {{-- <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                      Messages
+                                    </a>
+                                     --}}
+                                    {{-- <form action="{{ route('diagramador.destroy', $diagrama['id_diagrama']) }}" method="POST"
+                                    class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-purple-600 border border-gray-200 rounded-e-lg hover:bg-purple-700 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                                        Eliminar</button>
+                                    </form> --}}
+
+                                  </div>
                             </div>
                         </div>
                     @endforeach

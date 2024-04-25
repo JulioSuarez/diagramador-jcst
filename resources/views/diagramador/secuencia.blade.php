@@ -16,15 +16,15 @@
                     </button>
                     <a href="{{ route('codeJava',$diagramador->id) }}"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
-                        Exportar codeJava
+                         codeJava
                     </a>
                     <a href="{{ route('codePy',$diagramador->id) }}"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
-                        Exportar codePy
+                         codePy
                     </a>
                     <a href="{{ route('codePhp',$diagramador->id) }}"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center">
-                        Exportar codePhp
+                         codePhp
                     </a>
 
                     <form action="{{ route('exportarCase', $diagramador->id) }}" method="POST" class="inline">
