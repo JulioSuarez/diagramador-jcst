@@ -171,7 +171,7 @@
                     @foreach ($diagramasInvitados as $diagrama)
                         <div class="max-w-md bg-white p-8 rounded-md shadow-md m-2">
                             <!-- Imagen -->
-                            <img src="https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto,q_auto,f_auto/gigs/127887274/original/7c285ea64df36b830597d84a24a148f0a22ca6f7/write-a-my-sql-queries-end-create-erd-for-your-database.png"
+                            <img src="https://corporate-assets.lucid.co/chart/ab2608a0-d145-4f8d-a33b-85a7ae1186be.png"
                                 alt="Imagen" class="w-full h-32 object-cover mb-4 rounded-md">
 
                             <!-- Título -->
