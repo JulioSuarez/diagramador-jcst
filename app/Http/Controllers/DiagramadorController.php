@@ -490,8 +490,8 @@ class DiagramadorController extends Controller
         $parte2 = '';
 
         $parte1 .= '@Controller
-        public class ' . preg_replace('/[\s(){}\[\]-]/', '', $diagramador->titulo) . ' {
-        ';
+        public class ' . preg_replac('/[\s(){}\[\]-]/', '', $diagramador->titulo) . ' {
+        ';e
         foreach ($enlaces as $f) {
             $parte2 .= '
         @RequestMapping("/' . preg_replace('/[\s(){}\[\]-]/', '', $f->text) . '")
