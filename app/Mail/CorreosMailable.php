@@ -34,7 +34,7 @@ class CorreosMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitacion a la plataforma de Mis Pizarras',
+            subject: 'Invitacion a la plataforma de Mis Diagramas',
         );
     }
 
